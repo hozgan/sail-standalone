@@ -77,7 +77,7 @@ function generate_docker_compose_file {
     fi
 
     echo -e "${BOLD}\nEligible Runtime: ${NC}$eligable_runtime"
-    head -n 24 $SAIL_ROOT_DIR/stubs/docker-compose.stub | sed "s/runtimes\/8\.2/runtimes\/$eligable_runtime/" > $SAIL_DOCKER_COMPOSE_FILE
+    head -n 24 $SAIL_ROOT_DIR/stubs/docker-compose.stub | sed "s/runtimes\/8\.2/runtimes\/$eligable_runtime/" | sed "s/sail\-8\.2/sail\-$eligable_runtime/" > $SAIL_DOCKER_COMPOSE_FILE
 
     echo -e "${BOLD}\nEligible Services:${NC}"
     for service_name in ${eligable_services[@]}
@@ -86,6 +86,15 @@ function generate_docker_compose_file {
         cat $SAIL_ROOT_DIR/stubs/$service_name.stub | sed 's/^/    /' >> $SAIL_DOCKER_COMPOSE_FILE
     done
     tail -n 3 $SAIL_ROOT_DIR/stubs/docker-compose.stub >> $SAIL_DOCKER_COMPOSE_FILE
+
+    # volumes
+    echo "volumes:" >> $SAIL_DOCKER_COMPOSE_FILE
+    for service_name in ${eligable_services[@]}
+    do
+        echo "    sail-$service_name:" >> $SAIL_DOCKER_COMPOSE_FILE
+        echo "        driver: local" >> $SAIL_DOCKER_COMPOSE_FILE
+    done
+
     echo -e "\nSuccessfully Installed"
     exit 1
 }
