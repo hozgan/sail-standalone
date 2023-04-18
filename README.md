@@ -1,22 +1,29 @@
+# SAIL STANDALONE
 <p align="center"><img src="https://github.com/laravel/sail/raw/HEAD/art/logo.svg" alt="Logo Laravel Sail"></p>
 
-<p align="center">
-    <a href="https://packagist.org/packages/laravel/sail">
-        <img src="https://img.shields.io/packagist/dt/laravel/sail" alt="Total Downloads">
-    </a>
-    <a href="https://packagist.org/packages/laravel/sail">
-        <img src="https://img.shields.io/packagist/v/laravel/sail" alt="Latest Stable Version">
-    </a>
-    <a href="https://packagist.org/packages/laravel/sail">
-        <img src="https://img.shields.io/packagist/l/laravel/sail" alt="License">
-    </a>
-</p>
 
 ## Introduction
 
 Sail provides a Docker powered local development experience for Laravel that is compatible with macOS, Windows (WSL2), and Linux. Other than Docker, no software or libraries are required to be installed on your local computer before using Sail. Sail's simple CLI means you can start building your Laravel application without any previous Docker experience.
 
-vendor/bin/sail init --runtime 5.6 --with mysql,redis 
+
+#### Installation
+```
+composer require --dev hozgan/sail-standalone 
+```
+
+#### Initiate
+```
+vendor/bin/sail init --runtime 5.6 --with mysql,redis
+```
+
+#### Alias
+
+```
+alias sail='[ -f sail ] && sh sail || sh vendor/bin/sail'
+
+
+```
 
 #### Inspiration
 
