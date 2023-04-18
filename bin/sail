@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 UNAMEOUT="$(uname -s)"
-
+SAIL_DOCKER_COMPOSE_FILE=$PWD/docker-compose.yml
+SAIL_DOCKER_COMPOSE_FILE2=$PWD/docker-compose.yaml
 SAIL_ROOT_DIR="$(dirname -- "${BASH_SOURCE[0]}")/.."
 
 
@@ -36,7 +37,7 @@ function generate_docker_compose_file {
     required_runtime=(8.2)
     required_services=(mysql)
 
-    if [[ -f $PWD/docker-compose.yml ]] || [[ -f $PWD/docker-compose.yaml ]]; then
+    if [[ -f $SAIL_DOCKER_COMPOSE_FILE ]] || [[ -f $SAIL_DOCKER_COMPOSE_FILE2 ]]; then
         echo "${YELLOW}Sail is already initiated${NC}"; exit 1;
     fi
 
@@ -76,15 +77,15 @@ function generate_docker_compose_file {
     fi
 
     echo -e "${BOLD}\nEligible Runtime: ${NC}$eligable_runtime"
-    head -n 24 $SAIL_ROOT_DIR/stubs/docker-compose.stub | sed "s/runtimes\/8\.2/runtimes\/$eligable_runtime/" > $PWD/docker-compose.new.yml
+    head -n 24 $SAIL_ROOT_DIR/stubs/docker-compose.stub | sed "s/runtimes\/8\.2/runtimes\/$eligable_runtime/" > $SAIL_DOCKER_COMPOSE_FILE
 
     echo -e "${BOLD}\nEligible Services:${NC}"
     for service_name in ${eligable_services[@]}
     do
         echo " - $service_name"
-        cat $SAIL_ROOT_DIR/stubs/$service_name.stub | sed 's/^/    /' >> $PWD/docker-compose.new.yml
+        cat $SAIL_ROOT_DIR/stubs/$service_name.stub | sed 's/^/    /' >> $SAIL_DOCKER_COMPOSE_FILE
     done
-    tail -n 3 $SAIL_ROOT_DIR/stubs/docker-compose.stub >> $PWD/docker-compose.new.yml
+    tail -n 3 $SAIL_ROOT_DIR/stubs/docker-compose.stub >> $SAIL_DOCKER_COMPOSE_FILE
     echo -e "\nSuccessfully Installed"
     exit 1
 }
@@ -166,7 +167,7 @@ function display_help {
     echo "Unknown commands are passed to the docker-compose binary."
     echo
     echo "${YELLOW}service commands:${NC}"
-    echo "  ${GREEN}sail init --with mysql,redis${NC} --runtime 7.4     Set initial docker-compose file, default service mysql, default runtime 8.2"
+    echo "  ${GREEN}sail init --with mysql,redis --runtime 7.4${NC}     Set initial docker-compose file, default service mysql, default runtime 8.2"
     # echo "  ${GREEN}sail add meilisearch,mailpit,selenium${NC}        Add required services in docker-compose"
     echo "  ${GREEN}sail services${NC}                                  List all available service containers"
     echo "  ${GREEN}sail runtimes${NC}                                  List all available runtimes"
