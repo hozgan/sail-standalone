@@ -1,5 +1,4 @@
 # SAIL STANDALONE
-<p align="center"><img src="https://github.com/laravel/sail/raw/HEAD/art/logo.svg" alt="Logo Laravel Sail"></p>
 
 
 ## Introduction
