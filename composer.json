@@ -1,0 +1,27 @@
+{
+    "name": "hozgan/sail-standalone",
+    "description": "Docker files for running a basic Laravel application.",
+    "keywords": ["php", "docker"],
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/laravel/sail/issues",
+        "source": "https://github.com/laravel/sail"
+    },
+    "authors": [
+        {
+            "name": "Taylor Otwell",
+            "email": "taylor@laravel.com"
+        },
+        {
+            "name": "Hasan Ozgan",
+            "email": "hozgan@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.6"
+    },
+    "bin": [
+        "bin/sail"
+    ],
+    "minimum-stability": "dev"
+}
