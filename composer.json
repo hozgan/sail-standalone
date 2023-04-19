@@ -1,6 +1,6 @@
 {
     "name": "hozgan/sail-standalone",
-    "description": "Docker files for running a basic Laravel application.",
+    "description": "Docker files for running also any PHP (not laravel only) application.",
     "keywords": ["php", "docker"],
     "license": "MIT",
     "support": {
