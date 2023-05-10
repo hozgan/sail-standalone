@@ -3,8 +3,11 @@
 UNAMEOUT="$(uname -s)"
 SAIL_DOCKER_COMPOSE_FILE=$PWD/docker-compose.yml
 SAIL_DOCKER_COMPOSE_FILE2=$PWD/docker-compose.yaml
+SAIL_DOTENV_FILE=$PWD/.env
+SAIL_DOTENV_EXAMPLE_FILE=$PWD/.env.example
+SAIL_DEVCONTAINER_FOLDER=$PWD/.devcontainer
+SAIL_DEVCONTAINER_FILE=$SAIL_DEVCONTAINER_FOLDER/devcontainer.json
 SAIL_ROOT_DIR="$(dirname -- "${BASH_SOURCE[0]}")/.."
-
 
 # Verify operating system is supported...
 case "${UNAMEOUT}" in
@@ -94,6 +97,31 @@ function generate_docker_compose_file {
         echo "    sail-$service_name:" >> $SAIL_DOCKER_COMPOSE_FILE
         echo "        driver: local" >> $SAIL_DOCKER_COMPOSE_FILE
     done
+
+    # Set devcontainer file
+    mkdir -p $SAIL_DEVCONTAINER_FOLDER
+    cat $SAIL_ROOT_DIR/stubs/devcontainer.stub > $SAIL_DEVCONTAINER_FILE
+
+    # Set .env files
+    if [ -f "$SAIL_DOTENV_FILE" ] ; then
+        if ! grep -q "WWWUSER" "$SAIL_DOTENV_FILE" ; then
+            echo 'WWWUSER=1000' >> $SAIL_DOTENV_FILE
+        fi
+
+        if ! grep -q "WWWGROUP" "$SAIL_DOTENV_FILE" ; then
+            echo 'WWWGROUP=1000' >> $SAIL_DOTENV_FILE
+        fi
+    fi
+
+    if [ -f "$SAIL_DOTENV_EXAMPLE_FILE" ] ; then
+        if ! grep -q "WWWUSER" "$SAIL_DOTENV_EXAMPLE_FILE" ; then
+            echo 'WWWUSER=1000' >> $SAIL_DOTENV_EXAMPLE_FILE
+        fi
+
+        if ! grep -q "WWWGROUP" "$SAIL_DOTENV_EXAMPLE_FILE" ; then
+            echo 'WWWGROUP=1000' >> $SAIL_DOTENV_EXAMPLE_FILE
+        fi
+    fi
 
     echo -e "\nSuccessfully Installed"
     exit 1
