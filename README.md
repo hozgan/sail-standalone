@@ -28,7 +28,7 @@ alias sail='[ -f sail ] && sh sail || sh vendor/bin/sail'
 
 #### Initiate
 ```
-vendor/bin/sail init --runtime 5.6 --with mysql,redis
+sail init --runtime 5.6 --with mysql,redis
 ```
 #### Sail Up / Down
 
