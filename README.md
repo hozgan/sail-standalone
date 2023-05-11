@@ -20,16 +20,24 @@ docker run --rm \
 - PHP7 ghcr.io/hozgan/containers:php7
 - PHP8 ghcr.io/hozgan/containers:php8
 
-#### Initiate
-```
-vendor/bin/sail init --runtime 5.6 --with mysql,redis
-```
-
 #### Alias
 
 ```
 alias sail='[ -f sail ] && sh sail || sh vendor/bin/sail'
 ```
+
+#### Initiate
+```
+vendor/bin/sail init --runtime 5.6 --with mysql,redis
+```
+#### Sail Up / Down
+
+Sail uses docker-compose.
+
+```
+sail up -d
+```
+
 
 #### Inspiration
 
