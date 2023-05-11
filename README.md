@@ -7,8 +7,17 @@ Sail provides a Docker powered local development experience for Laravel that is 
 
 
 #### Installation
+
+**Supported PHP Versions Are:**
+- PHP5 ghcr.io/hozgan/containers:php5
+- PHP7 ghcr.io/hozgan/containers:php7
+- PHP8 ghcr.io/hozgan/containers:php8
+
 ```
-composer require --dev hozgan/sail-standalone 
+docker run --rm \
+    -v $(pwd):/opt \
+    -w /opt ghcr.io/hozgan/containers:php7 \
+    composer require --dev hozgan/sail-standalone 
 ```
 
 #### Initiate
@@ -20,8 +29,6 @@ vendor/bin/sail init --runtime 5.6 --with mysql,redis
 
 ```
 alias sail='[ -f sail ] && sh sail || sh vendor/bin/sail'
-
-
 ```
 
 #### Inspiration
