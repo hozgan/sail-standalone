@@ -9,18 +9,33 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				// "mikestead.dotenv",
-				// "amiralizadeh9480.laravel-extra-intellisense",
-				// "ryannaddy.laravel-artisan",
-				// "onecentlin.laravel5-snippets",
-				// "onecentlin.laravel-blade"
+				"EditorConfig.EditorConfig",
+				"mikestead.dotenv",
+				"DEVSENSE.composer-php-vscode",
+				"DEVSENSE.phptools-vscode",
+				"DEVSENSE.profiler-php-vscode",
+				"bmewburn.vscode-intelephense-client",
+				"ritwickdey.LiveServer",
+				"MehediDracula.php-namespace-resolver",
+				"mikestead.dotenv",
+				"amiralizadeh9480.laravel-extra-intellisense",
+				"ryannaddy.laravel-artisan",
+				"onecentlin.laravel5-snippets",
+				"onecentlin.laravel-blade",
+				"codingyu.laravel-goto-view",
+				"naoray.laravel-goto-components",
+				"shufo.vscode-blade-formatter",
+				"glitchbl.laravel-create-view",
+				"IHunte.laravel-blade-wrapper",
+				"apility.beautify-blade",
+				"wraith13.zoombar-vscode"
 			],
 			"settings": {}
 		}
 	},
 	"remoteUser": "sail",
-	"postCreateCommand": "chown -R 1000:1000 /var/www/html"
-	// "forwardPorts": [],
-	// "runServices": [],
-	// "shutdownAction": "none",
+	// "postCreateCommand": "chown -R 1000:1000 /var/www/html",
+	"forwardPorts": [],
+	"runServices": [],
+	"shutdownAction": "none"
 }
