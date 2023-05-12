@@ -59,6 +59,10 @@ function generate_docker_compose_file {
     done
 
     local services;
+    local has_db=false;
+    local db_type;
+    local db_host;
+    local db_port;
     eval $(get_available_services)
     eval $(get_available_runtimes)
 
@@ -85,6 +89,24 @@ function generate_docker_compose_file {
     echo -e "${BOLD}\nEligible Services:${NC}"
     for service_name in ${eligable_services[@]}
     do
+        if [ "$service_name" = "mysql" ]; then
+            has_db=true
+            db_host="mysql"
+            db_type="mysql"
+            db_port="3306"
+        fi
+        if [ "$service_name" = "mariadb" ]; then
+            has_db=true
+            db_host="mariadb"
+            db_type="mysql"
+            db_port="3306"
+        fi
+        if [ "$service_name" = "pgsql" ]; then
+            has_db=true
+            db_host="pgsql"
+            db_type="pgsql"
+            db_port="5432"
+        fi
         echo " - $service_name"
         cat $SAIL_ROOT_DIR/stubs/$service_name.stub | sed 's/^/    /' >> $SAIL_DOCKER_COMPOSE_FILE
     done
@@ -111,6 +133,32 @@ function generate_docker_compose_file {
         if ! grep -q "WWWGROUP" "$SAIL_DOTENV_FILE" ; then
             echo 'WWWGROUP=1000' >> $SAIL_DOTENV_FILE
         fi
+
+        if $has_db ; then
+            if ! grep -q "DB_CONNECTION" "$SAIL_DOTENV_FILE" ; then
+                echo "DB_CONNECTION=$db_type" >> $SAIL_DOTENV_FILE
+            fi
+
+            if ! grep -q "DB_HOST" "$SAIL_DOTENV_FILE" ; then
+                echo "DB_HOST=$db_host" >> $SAIL_DOTENV_FILE
+            fi
+
+            if ! grep -q "DB_PORT" "$SAIL_DOTENV_FILE" ; then
+                echo "DB_PORT=$db_port" >> $SAIL_DOTENV_FILE
+            fi
+
+            if ! grep -q "DB_USERNAME" "$SAIL_DOTENV_FILE" ; then
+                echo 'DB_USERNAME=sail' >> $SAIL_DOTENV_FILE
+            fi
+
+            if ! grep -q "DB_PASSWORD" "$SAIL_DOTENV_FILE" ; then
+                echo 'DB_PASSWORD=password' >> $SAIL_DOTENV_FILE
+            fi
+
+            if ! grep -q "DB_DATABASE" "$SAIL_DOTENV_FILE" ; then
+                echo 'DB_DATABASE=laravel' >> $SAIL_DOTENV_FILE
+            fi
+        fi
     fi
 
     if [ -f "$SAIL_DOTENV_EXAMPLE_FILE" ] ; then
@@ -120,6 +168,32 @@ function generate_docker_compose_file {
 
         if ! grep -q "WWWGROUP" "$SAIL_DOTENV_EXAMPLE_FILE" ; then
             echo 'WWWGROUP=1000' >> $SAIL_DOTENV_EXAMPLE_FILE
+        fi
+
+        if $has_db ; then
+            if ! grep -q "DB_CONNECTION" "$SAIL_DOTENV_EXAMPLE_FILE" ; then
+                echo "DB_CONNECTION=$db_type" >> $SAIL_DOTENV_EXAMPLE_FILE
+            fi
+
+            if ! grep -q "DB_HOST" "$SAIL_DOTENV_EXAMPLE_FILE" ; then
+                echo "DB_HOST=$db_host" >> $SAIL_DOTENV_EXAMPLE_FILE
+            fi
+
+            if ! grep -q "DB_PORT" "$SAIL_DOTENV_FILE" ; then
+                echo "DB_PORT=$db_port" >> $SAIL_DOTENV_FILE
+            fi
+
+            if ! grep -q "DB_USERNAME" "$SAIL_DOTENV_EXAMPLE_FILE" ; then
+                echo 'DB_USERNAME=sail' >> $SAIL_DOTENV_EXAMPLE_FILE
+            fi
+
+            if ! grep -q "DB_PASSWORD" "$SAIL_DOTENV_EXAMPLE_FILE" ; then
+                echo 'DB_PASSWORD=password' >> $SAIL_DOTENV_EXAMPLE_FILE
+            fi
+
+            if ! grep -q "DB_DATABASE" "$SAIL_DOTENV_EXAMPLE_FILE" ; then
+                echo 'DB_DATABASE=laravel' >> $SAIL_DOTENV_EXAMPLE_FILE
+            fi
         fi
     fi
 
