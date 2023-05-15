@@ -12,7 +12,7 @@ Sail provides a Docker powered local development experience for Laravel that is 
 docker run --rm \
     -v $(pwd):/opt \
     -w /opt ghcr.io/hozgan/containers:php7 \
-    composer require --dev hozgan/sail-standalone 
+    composer require --dev hozgan/sail-standalone --for 2.0.0 # composer version
 ```
 
 **Supported PHP Versions Are:**
