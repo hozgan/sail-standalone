@@ -5,6 +5,7 @@ LABEL maintainer="Taylor Otwell"
 ARG WWWGROUP
 ARG NODE_VERSION=16
 ARG POSTGRES_VERSION=13
+ARG COMPOSER_VERSION=2.5.5
 
 WORKDIR /var/www/html
 
@@ -26,7 +27,7 @@ RUN apt-get update \
        php8.0-intl php8.0-readline php8.0-pcov \
        php8.0-msgpack php8.0-igbinary php8.0-ldap \
        php8.0-redis php8.0-swoole php8.0-xdebug \
-    && curl -sLS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer \
+    && curl -sLS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer --version=$COMPOSER_VERSION \
     && curl -sLS https://deb.nodesource.com/setup_$NODE_VERSION.x | bash - \
     && apt-get install -y nodejs \
     && npm install -g npm \
