@@ -13,5 +13,9 @@ chmod -R ugo+rw /.composer
 if [ $# -gt 0 ]; then
     exec gosu $WWWUSER "$@"
 else
-    exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+    if [ ! -z "$DOCUMENT_ROOT" ]; then
+        exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.phpd.conf
+    else
+        exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+    fi
 fi

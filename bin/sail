@@ -7,7 +7,7 @@ SAIL_DOTENV_FILE=$PWD/.env
 SAIL_DOTENV_EXAMPLE_FILE=$PWD/.env.example
 SAIL_DEVCONTAINER_FOLDER=$PWD/.devcontainer
 SAIL_DEVCONTAINER_FILE=$SAIL_DEVCONTAINER_FOLDER/devcontainer.json
-SAIL_ROOT_DIR="$(dirname -- "${BASH_SOURCE[0]}")/.."
+SAIL_ROOT_DIR="$(dirname -- "$(readlink -f ${BASH_SOURCE[0]})")/.."
 
 # Verify operating system is supported...
 case "${UNAMEOUT}" in
@@ -39,6 +39,7 @@ fi
 function generate_docker_compose_file {
     required_composer=""
     required_node=""
+    document_root=""
     required_runtime=(8.2)
     required_services=(mysql)
 
@@ -67,6 +68,17 @@ function generate_docker_compose_file {
         --node)
             required_node=$2
             shift 1
+            ;;
+        --lumen)
+            document_root="\/var\/www\/html\/public"
+            ;;
+        --document-root)
+            if [ ! -z "$$2" ]; then 
+                document_root="\/var\/www\/html\/$2"
+                shift 1
+            else 
+                document_root="\/var\/www\/html"
+            fi
             ;;
         esac
         shift
@@ -99,11 +111,12 @@ function generate_docker_compose_file {
 
     echo -e "${BOLD}\nEligible Runtime: ${NC}$eligable_runtime"
 
-    head -n 24 $SAIL_ROOT_DIR/stubs/docker-compose.stub | \
+    head -n 27 $SAIL_ROOT_DIR/stubs/docker-compose.stub | \
         sed "s/runtimes\/8\.2/runtimes\/$eligable_runtime/" | \
-        sed "s/sail\-8\.2/sail\-$eligable_runtime/" | \
+        sed "s/sail\-8\.2\/app/sail\-$eligable_runtime\/app$server_harness/" | \
         if [ ! -z "$required_composer" ]; then sed "s/\${COMPOSER_VERSION}/$required_composer/g" ; else sed "/COMPOSER_VERSION/d" ; fi | \
-        if [ ! -z "$required_node" ]; then sed "s/\${NODE_VERSION}/$required_node/g" ; else sed "/NODE_VERSION/d" ; fi  \
+        if [ ! -z "$required_node" ]; then sed "s/\${NODE_VERSION}/$required_node/g" ; else sed "/NODE_VERSION/d" ; fi | \
+        if [ ! -z "$document_root" ]; then sed "s/\${DOCUMENT_ROOT}/$document_root/g" ; else sed "/DOCUMENT_ROOT/d" ; fi  \
         > $SAIL_DOCKER_COMPOSE_FILE
 
     echo -e "${BOLD}\nEligible Services:${NC}"
@@ -285,7 +298,7 @@ function list_available_runtimes {
 }
 
 function add_service_in_docker_compose_file {
-    echo -e "${BOLD}\nNot Implemented Yet:${NC}"
+    echo "${BOLD}\nNot Implemented Yet:${NC}"
 }
 
 # Function that prints the available commands...
