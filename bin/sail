@@ -37,6 +37,8 @@ if test -t 1; then
 fi
 
 function generate_docker_compose_file {
+    required_composer=""
+    required_node=""
     required_runtime=(8.2)
     required_services=(mysql)
 
@@ -52,6 +54,18 @@ function generate_docker_compose_file {
             ;;
         --runtime)
             required_runtime=$2
+            shift 1
+            ;;
+        --php)
+            required_runtime=$2
+            shift 1
+            ;;
+        --composer)
+            required_composer=$2
+            shift 1
+            ;;
+        --node)
+            required_node=$2
             shift 1
             ;;
         esac
@@ -84,7 +98,13 @@ function generate_docker_compose_file {
     fi
 
     echo -e "${BOLD}\nEligible Runtime: ${NC}$eligable_runtime"
-    head -n 24 $SAIL_ROOT_DIR/stubs/docker-compose.stub | sed "s/runtimes\/8\.2/runtimes\/$eligable_runtime/" | sed "s/sail\-8\.2/sail\-$eligable_runtime/" > $SAIL_DOCKER_COMPOSE_FILE
+
+    head -n 24 $SAIL_ROOT_DIR/stubs/docker-compose.stub | \
+        sed "s/runtimes\/8\.2/runtimes\/$eligable_runtime/" | \
+        sed "s/sail\-8\.2/sail\-$eligable_runtime/" | \
+        if [ ! -z "$required_composer" ]; then sed "s/\${COMPOSER_VERSION}/$required_composer/g" ; else sed "/COMPOSER_VERSION/d" ; fi | \
+        if [ ! -z "$required_node" ]; then sed "s/\${NODE_VERSION}/$required_node/g" ; else sed "/NODE_VERSION/d" ; fi  \
+        > $SAIL_DOCKER_COMPOSE_FILE
 
     echo -e "${BOLD}\nEligible Services:${NC}"
     for service_name in ${eligable_services[@]}
@@ -278,10 +298,11 @@ function display_help {
     echo "Unknown commands are passed to the docker-compose binary."
     echo
     echo "${YELLOW}service commands:${NC}"
-    echo "  ${GREEN}sail init --with mysql,redis --runtime 7.4${NC}     Set initial docker-compose file, default service mysql, default runtime 8.2"
-    # echo "  ${GREEN}sail add meilisearch,mailpit,selenium${NC}        Add required services in docker-compose"
-    echo "  ${GREEN}sail services${NC}                                  List all available service containers"
-    echo "  ${GREEN}sail runtimes${NC}                                  List all available runtimes"
+    echo "  ${GREEN}sail init --with mysql,redis --php 7.4  ${NC}Set initial docker-compose file, default service mysql, default php version 8.2"
+    echo "  ${GREEN}          --composer 2.5.5 --node 18${NC}    --composer and --node arguments are optional"
+    # echo "  ${GREEN}sail add meilisearch,mailpit,selenium${NC} Add required services in docker-compose"
+    echo "  ${GREEN}sail services${NC}                           List all available service containers"
+    echo "  ${GREEN}sail runtimes${NC}                           List all available runtimes"
     echo
     echo "${YELLOW}docker-compose Commands:${NC}"
     echo "  ${GREEN}sail up${NC}        Start the application"

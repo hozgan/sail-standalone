@@ -7,6 +7,8 @@ services:
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'
+                COMPOSER_VERSION: '${COMPOSER_VERSION}'
+                NODE_VERSION: '${NODE_VERSION}'
         image: sail-8.2/app
         extra_hosts:
             - 'host.docker.internal:host-gateway'
