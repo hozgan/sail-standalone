@@ -7,7 +7,6 @@ services:
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'
-                COMPOSER_VERSION: '${COMPOSER_VERSION}'
                 NODE_VERSION: '${NODE_VERSION}'
         image: sail-8.2/app
         extra_hosts:
@@ -18,6 +17,7 @@ services:
         environment:
             WWWUSER: '${WWWUSER}'
             DOCUMENT_ROOT: '${DOCUMENT_ROOT}'
+            COMPOSER_VERSION: '${COMPOSER_VERSION}'
             LARAVEL_SAIL: 1
             XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
             XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'

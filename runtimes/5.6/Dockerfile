@@ -5,7 +5,6 @@ LABEL maintainer="Hasan Ozgan"
 ARG WWWGROUP
 ARG NODE_VERSION=16
 ARG POSTGRES_VERSION=13
-ARG COMPOSER_VERSION=2.2
 
 WORKDIR /var/www/html
 
@@ -27,7 +26,7 @@ RUN apt-get update \
        php5.6-intl php5.6-readline \
        php5.6-msgpack php5.6-igbinary php5.6-ldap \
        php5.6-redis php5.6-xdebug \
-    && curl -sLS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer --version=$COMPOSER_VERSION \
+    && curl -sLS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer \
     && curl -sLS https://deb.nodesource.com/setup_$NODE_VERSION.x | bash - \
     && apt-get install -y nodejs \
     && npm install -g npm \
