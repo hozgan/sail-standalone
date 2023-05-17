@@ -38,6 +38,25 @@ Sail uses docker-compose.
 sail up -d
 ```
 
+### Lumen Support
+
+You can add lumen support with `--lumen` option flag.
+
+```
+sail init --php 5.6 --lumen
+```
+
+### Using Built-in PHP Server
+
+```
+sail init --php 5.6 --document-root
+```
+OR
+```
+sail init --php 5.6 --document-root public
+```
+
+
 
 #### Inspiration
 
