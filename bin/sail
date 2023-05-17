@@ -113,7 +113,7 @@ function generate_docker_compose_file {
 
     head -n 27 $SAIL_ROOT_DIR/stubs/docker-compose.stub | \
         sed "s/runtimes\/8\.2/runtimes\/$eligable_runtime/" | \
-        sed "s/sail\-8\.2/sail\-$eligable_runtime/" | \
+        if [ ! -z "$required_node" ]; then sed "s/sail\-8\.2/sail\-php$eligable_runtime-node$required_node/" ; else sed "s/sail\-8\.2/sail\-$eligable_runtime/" ; fi | \
         if [ ! -z "$required_composer" ]; then sed "s/\${COMPOSER_VERSION}/$required_composer/g" ; else sed "/COMPOSER_VERSION/d" ; fi | \
         if [ ! -z "$required_node" ]; then sed "s/\${NODE_VERSION}/$required_node/g" ; else sed "/NODE_VERSION/d" ; fi | \
         if [ ! -z "$document_root" ]; then sed "s/\${DOCUMENT_ROOT}/$document_root/g" ; else sed "/DOCUMENT_ROOT/d" ; fi  \
